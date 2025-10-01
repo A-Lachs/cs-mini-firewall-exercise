@@ -2,24 +2,26 @@ import random
 import csv
 
 # TASK: create input file with packets 
-# packets include a serial number (1-10) and a priority (1-10)
+# Packets include a serial number (1 to N) and a priority (1 to 10)
 
-NR_PACKETS = 50
+N_PACKETS = 50
+HIGHEST_PRIORITY = 1
+LOWEST_PRIORITY = 10
 FILE_NAME_INPUT = "input.csv"
 
 
-def generate_packets(number_of_packets=NR_PACKETS, ongoing=False):
+def generate_packets(number_of_packets=N_PACKETS, ongoing=True):
     """
-    Create a list of n packages, with n defined by number_of_packages.
-    Each package is a tuple (serial_bumber, priority)
-    - where serial_number is an int from 1 to 10 (ongoing=False) or 1 to NR_PAckets (ongoning=True)
-    - where priority is a random int from 1 to 10. 
+    Create a list of n packets.
+    Each packet is a tuple (serial_number, priority)
+    - where serial_number is an int from 1 to 10 (ongoing=False) or 1 to N_PACKETS (ongoning=True)
+    - where priority is a random int from HIGHEST_PRIORITY to LOWEST_PRIORITY. 
     
     Args:
-        number_of_packets (int, optional): Defaults to NR_PACKETS.
+        number_of_packets (int, optional): Defaults to N_PACKETS.
 
     Returns:
-        list of tuples: packages = [(serial_number, priority), ...]
+        list of packetes(int, int) = [(serial_number, priority), ...]
     """
     packets = []
     serial_number = 0
@@ -30,7 +32,7 @@ def generate_packets(number_of_packets=NR_PACKETS, ongoing=False):
             # define first batch of 10 packages
             if serial_number < 10:
                 serial_number += 1
-                priority = random.randint(1,10) 
+                priority = random.randint(HIGHEST_PRIORITY,LOWEST_PRIORITY) 
                 # print(packet, serial_number, priority)
                 packets.append((serial_number, priority)) # use serial nr 1-10
             
@@ -57,12 +59,13 @@ def input_to_csv(packets_list, file_name=FILE_NAME_INPUT):
      
 # ----------------------------------- test input ----------------------------
 
-new_p = generate_packets(ongoing=True)
-print(new_p)
-print(type(new_p[0][0]))
-input_to_csv(new_p)
+
+if __name__ == "__main__":
+
+    new_packets = generate_packets(number_of_packets=N_PACKETS, ongoing=True)
+    input_to_csv(new_packets)
 
 
 
-# TODO: create faulty input 
+# TODO: create faulty test input 
 
