@@ -4,7 +4,7 @@ import csv
 # TASK: create input file with packets 
 # packets include a serial number (1-10) and a priority (1-10)
 
-NR_PACKETS = 46
+NR_PACKETS = 50
 FILE_NAME_INPUT = "input.csv"
 
 
@@ -47,7 +47,7 @@ def generate_packets(number_of_packets=NR_PACKETS, ongoing=False):
     return packets
 
 
-def save_to_csv(packets_list, file_name=FILE_NAME_INPUT):
+def input_to_csv(packets_list, file_name=FILE_NAME_INPUT):
     with open(file_name, "w", encoding="utf-8", newline="") as f:
         writer=csv.writer(f, skipinitialspace=True)
         # write header
@@ -60,7 +60,7 @@ def save_to_csv(packets_list, file_name=FILE_NAME_INPUT):
 new_p = generate_packets(ongoing=True)
 print(new_p)
 print(type(new_p[0][0]))
-save_to_csv(new_p)
+input_to_csv(new_p)
 
 
 
