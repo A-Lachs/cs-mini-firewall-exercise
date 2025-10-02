@@ -11,31 +11,6 @@ VERBOSE = 0     #  enable additional print statements with 1, disable  with 0
 
 # ------------------------------ utility functions -----------------------------------
 
-def read_from_csv(file_path=FILE_NAME_INPUT) -> list[tuple]:
-    """
-    From a csv file read packets in the format serial_nr, priority.
-    Return a list of tuples.
-
-    Version 1. Not optimized for edge cases.
-    """
-    if not os.path.exists(file_path):
-        print(f"\n-There is no file '{file_path}' to read from.")
-        return 
-    
-    input_data = []
-
-    with open(file_path, "r", encoding="utf-8") as f:
-        reader = csv.reader(f)
-        next(reader, None)  # skip header if present
-        
-        for row in reader:   
-            #read each line as a tuple, convert to int -> (int, int) and append to list
-            input_data.append((int(row[0].strip()), int(row[1].strip())))
-    
-    print(f"\n+++ Reading {len(input_data)} packets from '{file_path}'." )
-
-    return input_data
-
 
 def read_from_file(file_path=FILE_NAME_INPUT) -> list[tuple]:
     """
@@ -43,7 +18,7 @@ def read_from_file(file_path=FILE_NAME_INPUT) -> list[tuple]:
     Assumes 1 packet per line with 2 int values: serial_nr, priority. 
     Return a list of tuples.
 
-    Version 2. Optimized:
+    Optimized:
         - Skips blank or comment line (starting with #)
         - Accepts blank space and comma seperators
         - Checks for number of values = 2 per row 

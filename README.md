@@ -18,15 +18,19 @@ Goal: Design a firewall that filters packets in batches and allows them through 
 
 # Future improvement ideas
 
-1.  Output format deviates from the accepted formats
+1.  Change Output formats
     - Before: one batch per line
     - Expected: either one line per packet "SerialNo, Priority" or a serial-only list
-        - **Option A** (per-packet lines): for each batch, for each packet (s, p), write "s, p" on its own line.
+        - NOW: **Option A** (per-packet lines): for each batch, for each packet (s, p), write "s, p" on its own line.
         - **Option B** (serial-only per batch): write a single line with just the serials for each batch (e.g., 3,10,2,4,1,9,5,6) 
     
-2.  Introduce output variants 
-    -   offer a serial-only output or print to stdout as an alternative 
-    -   idea: add a small CLI flag like --serial-only
+2.  Introduce output variants and CLI options
+    -   Offer a serial-only output or print to stdout as an alternative to make testing easier
+    -   Add a CLI option: --input, --output, and an optional --serial-only or --stdout mode to match the “serials-only” accepted variant 
+    
+3. Simpler and safer comparator 
+    -   replace the two-pass quicksort with Python’s built-in stable sort using a single key to make the intent explicit and avoid relying on sort stability nuances.
+    -   e.g., `sorted(batch, key=lambda x: (x[1], x[0]))`
 
 3. Improve create_input.py script to include edge cases 
 
