@@ -43,7 +43,7 @@ def generate_packets(number_of_packets=N_PACKETS, ongoing=True):
     else: # use ongoing serial nrs
 
         for packet in range(1, number_of_packets+1):
-                priority = random.randint(HIGHEST_PRIORITY,HIGHEST_PRIORITY) 
+                priority = random.randint(HIGHEST_PRIORITY,LOWEST_PRIORITY) 
                 # print(packet, serial_number, priority)
                 packets.append((packet, priority)) # use ongoing serial nr
      

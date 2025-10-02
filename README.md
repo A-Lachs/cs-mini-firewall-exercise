@@ -17,10 +17,14 @@ Goal: Design a firewall that filters packets in batches and allows them through 
     -   Writing sorted batches to 'output.csv' with one line for each batch
 
 # Future improvement ideas
-1. Improve parsing to include more input file variants 
-    -   new `read_from_file()` function
 
-2. Introduce output variants 
+1.  Output format deviates from the accepted formats
+    - Before: one batch per line
+    - Expected: either one line per packet "SerialNo, Priority" or a serial-only list
+        - **Option A** (per-packet lines): for each batch, for each packet (s, p), write "s, p" on its own line.
+        - **Option B** (serial-only per batch): write a single line with just the serials for each batch (e.g., 3,10,2,4,1,9,5,6) 
+    
+2.  Introduce output variants 
     -   offer a serial-only output or print to stdout as an alternative 
     -   idea: add a small CLI flag like --serial-only
 

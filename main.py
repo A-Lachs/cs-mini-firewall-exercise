@@ -233,8 +233,10 @@ def output_to_csv(sorted_output, file_name=FILE_NAME_OUTPUT):
     with open(file_name, "w", encoding="utf-8", newline="") as f: 
         # write data
         for batch in sorted_output:
-            #f.write(str(batch) + "\n") # remove ""  for each batch
-            f.write(", ".join(str(t) for t in batch) + "\n")   # remove []  for each batch
+            for packet in batch: # one line per packet 
+                f.write(str(packet[0]) + ","+ str(packet[1]) + "\n")
+            # one line per batch
+            #f.write(", ".join(str(t) for t in batch) + "\n")   # remove []  for each batch
     print(f"\n+++ Writing {len(sorted_output)} sorted batches to '{file_name}'.")
         
 # --------------------------------- main program  -----------------------------------
@@ -250,7 +252,7 @@ if __name__ == "__main__":
 
         # continue if the input has the correct format
         if input_valid(new_input):
-            
+
             batches = create_batches(new_input)
             sorted_batches = sort_batches(batches)
 
