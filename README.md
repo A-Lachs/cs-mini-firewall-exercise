@@ -18,7 +18,7 @@ Goal: Design a firewall that filters packets in batches and allows them through 
 
 # Future improvement ideas
 
-1. Improve parsing to include more input file variants
+1. Improve parsing to include more input file variants --> new `read_from_file()` function
     - Skip blank and comment lines
     - Accept other delimiters (commas and white space)
     - wrap int parsing in try/except to continue on malformed rows

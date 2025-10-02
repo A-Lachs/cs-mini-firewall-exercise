@@ -15,6 +15,8 @@ def read_from_csv(file_path=FILE_NAME_INPUT) -> list[tuple]:
     """
     From a csv file read packets in the format serial_nr, priority.
     Return a list of tuples.
+
+    Version 1. Not optimized for edge cases.
     """
     if not os.path.exists(file_path):
         print(f"\n-There is no file '{file_path}' to read from.")
@@ -26,8 +28,70 @@ def read_from_csv(file_path=FILE_NAME_INPUT) -> list[tuple]:
         reader = csv.reader(f)
         next(reader, None)  # skip header if present
         for row in reader:
-            # read each line as a tuple, convert to int -> (int, int) and append to list
+        
+            #read each line as a tuple, convert to int -> (int, int) and append to list
             input_data.append((int(row[0].strip()), int(row[1].strip())))
+    
+    print(f"\n+++ Reading {len(input_data)} packets from '{file_path}'." )
+
+    return input_data
+
+
+def read_from_file(file_path=FILE_NAME_INPUT) -> list[tuple]:
+    """
+    From a file read packets.
+    Assumes 1 packet per line with 2 int values: serial_nr, priority. 
+    Return a list of tuples.
+
+    Version 2. Optimized:
+        - Skips blank or comment line (starting with #)
+        - Accepts blank space and comma seperators
+        - Checks for number of values = 2 per row 
+        - Test for int conversion (otherwise skips)
+        - Test vor value range (both values must be positive and the second not larger than 10)
+    """
+    if not os.path.exists(file_path):
+        print(f"\n-There is no file '{file_path}' to read from.")
+        return 
+    
+    input_data = []
+
+    with open(file_path, "r", encoding="utf-8") as f:
+        
+        for row in f:
+            # go though muliple check per row
+            row=row.strip()
+
+            # skip blank lines or comment lines starting with #
+            if not row or row.startswith("#"):
+                continue
+
+            # split line: try comma first, otherwise split on whitespace
+            if "," in row:
+                parts = row.split(",")
+            else:
+                parts = row.split()
+            
+            # sanity check: must have exactly 2 values
+            if len(parts) != 2:
+                # print(f"Skipping row: expected 2 values, got {len(parts)}")
+                continue 
+
+            # try int conversion
+            try: 
+                a, b = int(parts[0]), int(parts[1])
+
+                # additionally check range a and b have positive values, and b is max 10
+                if a <= 0 or b <= 0 or b > 10:
+                    # print(f"Skipping row: out-of-range values ({parts})")
+                    continue  
+                
+                # append the row to input_data
+                input_data.append((a,b))
+
+            except ValueError:
+                #print(f"Skipping row: invalid integers ({parts})")
+                continue
     
     print(f"\n+++ Reading {len(input_data)} packets from '{file_path}'." )
 
@@ -66,7 +130,7 @@ def input_valid(input_data:list) -> bool:
 def create_batches(input_data:list, batch_size=BATCH_SIZE, verbose=1)-> list:
     """
     From list of input data with packets, create a new list of packets in batches.
-    Use indexing to form batches of size batch_size and return a new list with batched_data.
+    Use indexing to slice batches of size batch_size and return a new list with batched_data.
 
     Args:
         input_data ([(int,int), (int,int)]): List of packets that are tuples(int, int).
@@ -80,9 +144,9 @@ def create_batches(input_data:list, batch_size=BATCH_SIZE, verbose=1)-> list:
     j=0
     for i in range(full_batches):
         # go through indexes for all subsequent full batches
-        j += 10
+        j += batch_size
         # print(f"Indexes: {i*10}, {j}"")
-        batched_data.append(input_data[i*10: j])
+        batched_data.append(input_data[i*batch_size: j])
 
     # add the last incomplete batch if there is one
     if last_batch:
@@ -178,7 +242,7 @@ def output_to_csv(sorted_output, file_name=FILE_NAME_OUTPUT):
 if __name__ == "__main__":
 
     # try to read in input 
-    new_input = read_from_csv()
+    new_input = read_from_file()
 
     # continue if there is inpur 
     if new_input:
