@@ -16,6 +16,19 @@ Goal: Design a firewall that filters packets in batches and allows them through 
     - Sorting packets in batches using quick algorythm (highest prio priority and lowest serial nr first)
     - Writing sorted batches to 'output.csv' with one line for each batch
 
+# Future improvement ideas
+
+1. Improve parsing to include more input file variants
+    - Skip blank and comment lines
+    - Accept other delimiters (commas and white space)
+    - wrap int parsing in try/except to continue on malformed rows
+
+2. Introduce output variants 
+    - offer a serial-only output or print to stdout as an alternative to match accepted output formats (idea: add a small CLI flag e.g., --serial-only)
+
+3. Improve create_input.py script to introduce edge cases 
+    - implement systematic testing of edge cases
+    
 
 # Disclaimer
 This is a WIP, I am still learning (Oktober 2025)
