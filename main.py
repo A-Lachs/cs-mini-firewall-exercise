@@ -27,8 +27,8 @@ def read_from_csv(file_path=FILE_NAME_INPUT) -> list[tuple]:
     with open(file_path, "r", encoding="utf-8") as f:
         reader = csv.reader(f)
         next(reader, None)  # skip header if present
-        for row in reader:
         
+        for row in reader:   
             #read each line as a tuple, convert to int -> (int, int) and append to list
             input_data.append((int(row[0].strip()), int(row[1].strip())))
     
@@ -59,7 +59,7 @@ def read_from_file(file_path=FILE_NAME_INPUT) -> list[tuple]:
     with open(file_path, "r", encoding="utf-8") as f:
         
         for row in f:
-            # go though muliple check per row
+            # go though muliple checks per row
             row=row.strip()
 
             # skip blank lines or comment lines starting with #
@@ -72,9 +72,9 @@ def read_from_file(file_path=FILE_NAME_INPUT) -> list[tuple]:
             else:
                 parts = row.split()
             
-            # sanity check: must have exactly 2 values
+            # packet must have exactly 2 values
             if len(parts) != 2:
-                # print(f"Skipping row: expected 2 values, got {len(parts)}")
+                # print(f"- Skipping row: expected 2 values, got {len(parts)}")
                 continue 
 
             # try int conversion
@@ -83,14 +83,14 @@ def read_from_file(file_path=FILE_NAME_INPUT) -> list[tuple]:
 
                 # additionally check range a and b have positive values, and b is max 10
                 if a <= 0 or b <= 0 or b > 10:
-                    # print(f"Skipping row: out-of-range values ({parts})")
+                    # print(f"- Skipping row: out-of-range values ({parts})")
                     continue  
                 
                 # append the row to input_data
                 input_data.append((a,b))
 
             except ValueError:
-                #print(f"Skipping row: invalid integers ({parts})")
+                #print(f"- Skipping row: invalid integers ({parts})")
                 continue
     
     print(f"\n+++ Reading {len(input_data)} packets from '{file_path}'." )
@@ -126,6 +126,7 @@ def input_valid(input_data:list) -> bool:
             return False
         
     return True
+
 
 def create_batches(input_data:list, batch_size=BATCH_SIZE, verbose=1)-> list:
     """
@@ -244,11 +245,12 @@ if __name__ == "__main__":
     # try to read in input 
     new_input = read_from_file()
 
-    # continue if there is inpur 
+    # continue if there is input
     if new_input:
 
         # continue if the input has the correct format
         if input_valid(new_input):
+            
             batches = create_batches(new_input)
             sorted_batches = sort_batches(batches)
 
